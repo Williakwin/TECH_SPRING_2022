@@ -6,11 +6,10 @@ Chinook
 					MySQL SQL Exercises
 
 1. How many songs are there in the playlist “Grunge”?
-    use chinook;
     Select * FROM playlist WHERE name = 'Grunge'
 
 2. Show information about artists whose name includes the text “Jack” and about artists whose name includes the text
-“John”, but not the text “Martin”.
+    “John”, but not the text “Martin”.
     SELECT * FROM artist
     WHERE Name = 'Jack' & 'John' &! 'Martin';
 
