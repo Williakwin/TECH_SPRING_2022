@@ -37,4 +37,9 @@ CREATE TABLE IF NOT EXISTS movies_production_teams(
     FOREIGN KEY(production_team_id) REFERENCES production_teams(id) ON DELETE CASCADE
 )
 
-#CREATE AN INSERT STATEMENT
+#CREATE AN INSERT STATEMENT IN movies_production_teams
+INSERT INTO production_teams(team_name) VALUES ('A - Team');
+INSERT INTO movies_production_teams(movie_id, production_team_id) VALUES (3, 1);
+
+DELETE FROM production_teams
+WHERE ID = 1;

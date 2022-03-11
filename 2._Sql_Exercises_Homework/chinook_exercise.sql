@@ -7,18 +7,26 @@ Chinook
 
 1. How many songs are there in the playlist “Grunge”?
 
-Select * FROM playlist WHERE name = 'Grunge'
+SELECT count(playlist.Name)
+FROM playlist, playlisttrack, track
+WHERE playlist.Name = 'Grunge'
+AND playlist.PlaylistId = playlisttrack.PlaylistId
+AND playlisttrack.TrackId = track.TrackId;
 
 2. Show information about artists whose name includes the text “Jack” and about artists whose name includes the text
 “John”, but not the text “Martin”.
 
-SELECT * FROM artist
-WHERE Name = 'Jack' & 'John' &! 'Martin';
+SELECT artist.Name
+FROM artist
+WHERE (Name REGEXP 'Jack' OR Name REGEXP 'John')
+AND Name NOT REGEXP 'Martin';
+
 
 3. For each country where some invoice has been issued, show the total invoice monetary amount, but only for countries
 where at least $100 have been invoiced. Sort the information from higher to lower monetary amount.
 
-SELECT SUM(Total) AS monetaryAmount FROM invoice
+SELECT SUM(Total) AS monetaryAmount
+FROM invoice
 GROUP BY BillingCountry
 HAVING SUM(Total) >= 100
 ORDER BY monetaryAmount DESC;
@@ -26,7 +34,9 @@ ORDER BY monetaryAmount DESC;
 4. Get the phone number of the boss of those employees who have given support to clients who have bought some song
 composed by “Miles Davis” in “MPEG Audio File” format.
 
-SELECT DISTINCT e2.Phone FROM employee INNER JOIN employee e2 on employee.ReportsTo = e2.EmployeeId, customer, invoice, artist, mediatype
+SELECT DISTINCT e2.Phone
+FROM employee
+INNER JOIN employee e2 on employee.ReportsTo = e2.EmployeeId, customer, invoice, artist, mediatype
 WHERE MediaTypeId = 1
 AND artist.Name = 'Miles Davis'
 AND invoice.CustomerId = customer.CustomerId
@@ -35,7 +45,8 @@ AND customer.SupportRepId = employee.EmployeeId;
 5. Show the information, without repeated records, of all albums that feature songs of the “Bossa Nova” genre whose
 title starts by the word “Samba”.
 
-SELECT DISTINCT Album.AlbumId, Title, ArtistId FROM Album, Track, Genre
+SELECT DISTINCT Album.AlbumId, Title, ArtistId
+FROM Album, Track, Genre
 WHERE Track.GenreId = Genre.GenreId
 AND Genre.Name = 'Bossa Nova'
 AND Track.AlbumId = Album.AlbumId
@@ -53,7 +64,8 @@ GROUP BY Genre;
 
 7. How many client companies have no state?
 
-SELECT DISTINCT count(Company) From customer
+SELECT DISTINCT count(Company)
+From customer
 WHERE State IS NULL
 AND Company IS NOT NULL;
 
@@ -62,7 +74,8 @@ s/he has given support, only when this number is higher than 6. Sort the query b
 employee, show his/her first name and surname separated by a space. Use “Employee” and “Clients” as headers.
 
 SELECT CONCAT(Employee.FirstName,' ', Employee.LastName) AS 'Employee',
-COUNT(SupportRepId) AS 'Client' FROM Employee
+COUNT(SupportRepId) AS 'Client'
+FROM Employee
 LEFT JOIN Customer C on Employee.EmployeeId = C.SupportRepId
 WHERE C.Country = 'USA'
 OR C.Country = 'Canada'
@@ -73,7 +86,8 @@ GROUP BY Employee HAVING Client > 6;
 number. If they do not have a fax number, show the text “S/he has no fax”. Sort by surname and first name.
 
 SELECT CONCAT(FirstName, ',' , LastName) AS fullName,
-IF NULL(Fax, 'S/he has no fax') AS fax FROM customer
+IF NULL(Fax, 'S/he has no fax') AS fax
+ROM customer
 WHERE Country = 'USA'
 ORDER BY fullName ASC;
 

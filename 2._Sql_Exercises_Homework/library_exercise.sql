@@ -1,3 +1,12 @@
+Kevin Williams
+DAT21I TECH SPRING 2022
+
+DATABASES
+Library
+					MySQL SQL Exercises
+
+
+
 1 Show the members under the name "Jens S." who were born before 1970 that became members of the library in 2013.
 
 Select * FROM tmember
@@ -21,7 +30,7 @@ SELECT cName,
 FROM tmember
 WHERE cAddress IS NULL;
 
-4 Show the authors with surname "Byatt" whose name starts by an "A" (uppercase) and contains an "S" (uppercase).
+4 Show the authors with surname "Byatt" whose name starts by an "A" (uppercase) and contains an "S" (uppercase).;
 
 SELECT * FROM tauthor
 WHERE cSurname = 'Byatt';
@@ -33,12 +42,41 @@ WHERE nPublishingYear BETWEEN '2007-01-01' AND '2007-12-31'
 AND nPublishingCompanyID = 32;
 
 
-6 For each day of the year 2014, show the number of books loaned by the member with CPR "0305393207";
+6 For each day of the year 2014, show the number of books loaned by the member with CPR "0305393207"
+
+SELECT a.cName,
+       a.cSurname,
+       b.cCPR,
+       b.dLoan,
+       c.cTitle
+FROM ((tmember AS a
+    INNER JOIN tloan AS b ON b.cCPR = a.cCPR)
+         INNER JOIN tbook AS c)
+WHERE a.cCPR = '0305393207'
+AND b.dLoan BETWEEN '2014-01-01' AND '2014-12-31';
 
 7 Modify the previous clause so that only those days where the member was loaned more than one book appear.
 
+SELECT a.cName,
+       a.cSurname,
+       b.cCPR,
+       b.dLoan,
+       c.cTitle
+FROM ((tmember AS a
+    INNER JOIN tloan AS b ON b.cCPR = a.cCPR)
+         INNER JOIN tbook AS c)
+WHERE a.cCPR = '0305393207'
+AND b.dLoan BETWEEN '2014-01-01' AND '2014-12-31';
+
 8 Show all library members from the newest to the oldest. Those who became members on the same day will be sorted
 alphabetically (by surname and name) within that day.
+
+SELECT cName,
+cSurname,
+dNewMember
+FROM tmember
+WHERE dNewMember ORDER BY dNewMember,
+cName;
 
 9 Show the title of all books published by the publishing company with ID 32 along with their theme or themes.
 
@@ -50,12 +88,12 @@ WHERE tbook.nPublishingCompanyID = 32;
 10 Show the name and surname of every author along with the number of books authored by them, but only for authors who
 have registered books on the database.
 
-SELECT COUNT(cTitle), cName, cSurname
-FROM ((tbook
-INNER JOIN tauthorship ON tbook.nBookID = tauthorship.nBookID)
-INNER JOIN tauthor ON tauthor.nAuthorID = tauthorship.nAuthorID)
-WHERE cTitle IS NOT NULL
-GROUP BY cName, cSurname;
+SELECT a.cName,
+a.cSurname
+FROM tauthor AS a
+INNER JOIN tauthorship ON tauthorship.nAuthorID = a.nAuthorID
+INNER JOIN tbook ON tauthorship.nBookID = tbook.nBookID;
+
 
 11 Show the name and surname of all the authors with published books along with the lowest publishing year for their
 books.
@@ -122,6 +160,14 @@ ORDER BY cm.cname & cm.cSurname;
 16 Show the name and surname of all authors along with their nationality or nationalities and the titles of their books.
 Every author must be shown, even though s/he has no registered books. Sort by author name and surname.
 
+SELECT tauthor.cName, tauthor.cSurname, tcountry.cName, if(tauthor.nAuthorID <> tauthorship.nBookID, tbook.cTitle, '')
+AS TITLE
+FROM tauthor
+INNER JOIN tnationality ON tauthor.nAuthorID = tnationality.nAuthorID
+INNER JOIN tcountry ON tnationality.nCountryID = tcountry.nCountryID
+INNER JOIN tbook ON tauthorship.nBookID = tbook.nBookID
+ORDER BY  tauthor.cName, cSurname;
+
 
 17 Show the title of those books which have had different editions published in both 1970 and 1989.
 
@@ -153,11 +199,19 @@ ASC LIMIT 1;
 20 For each publishing year, show the number of book titles published by publishing companies from countries that
 constitute the nationality for at least three authors. Use subqueries.
 
+SELECT a.cTitle,
+a.nPublishingCompanyID,
+b.nCountryID,
+c.cName,
+c.cSurname
+FROM tbook AS a
+INNER JOIN tnationality AS b ON b.nCountryID = a.nPublishingCompanyID
+INNER JOIN tauthor AS c ON c.nAuthorID = b.nAuthorID;
+
 
 21 Show the name and country of all publishing companies with the headings "Name" and "Country".
 
-SELECT tcountry.cName
-    AS Country,
+SELECT tcountry.cNameAS Country,
        tpublishingcompany.cName AS Name
 FROM tcountry, tpublishingcompany
 WHERE tpublishingcompany.nCountryID = tcountry.nCountryID;
@@ -165,20 +219,58 @@ WHERE tpublishingcompany.nCountryID = tcountry.nCountryID;
 22 Show the titles of the books published between 1926 and 1978 that were not published by the publishing company with
 ID 32.
 
+SELECT * FROM tbook
+WHERE nPublishingYear BETWEEN 1926 AND 1978
+AND nPublishingCompanyID != 32;
 
 23 Show the name and surname of the members who joined the library after 2016 and have no address.
+
+SELECT cName,
+cSurname,
+dNewMember,
+cAddress
+FROM tmember
+WHERE dNewMember > 2016-01-01
+AND cAddress IS NULL ;
 
 
 24 Show the country codes for countries with publishing companies. Exclude repeated values.
 
+SELECT DISTINCT a.nCountryID,
+                b.cName
+FROM tpublishingcompany AS a
+INNER JOIN tcountry AS b ON b.nCountryID = a.nCountryID;
+
+
 
 25 Show the titles of books whose title starts by "The Tale" and that are not published by "Lynch Inc".
 
+SELECT a.cTitle,
+a.nPublishingCompanyID,
+b.cName
+FROM tbook AS a
+INNER JOIN tpublishingcompany AS b ON b.nPublishingCompanyID = a.nPublishingCompanyID
+WHERE cTitle LIKE 'The Tale %'
+AND cName != 'Lynch Inc';
+
 
 26 Show the list of themes for which the publishing company "Lynch Inc" has published books, excluding repeated values.
-
+SELECT DISTINCT a.cName,
+b.cName
+FROM ttheme AS a
+INNER JOIN tpublishingcompany AS b
+INNER JOIN tbooktheme ON tbooktheme.nThemeID = a.nThemeID
+WHERE b.cName = 'Lynch Inc';
 
 27 Show the titles of those books which have never been loaned.
+
+SELECT cTitle
+FROM tbook
+INNER JOIN tmember
+INNER JOIN tloan ON tloan.cCPR != tmember.cCPR
+INNER JOIN tbookcopy ON tbookcopy.cSignature != tloan.cSignature;
+
+
 
 SELECT DISTINCT cTitle
 FROM tbook
@@ -187,6 +279,7 @@ WHERE cSignature IN(SELECT cSignature FROM tloan WHERE tloan.cSignature IS NOT N
 
 
 28 For each publishing company, show its number of existing books under the heading "No. of Books".
+
 
 
 29 Show the number of members who took some book on a loan during 2013.
