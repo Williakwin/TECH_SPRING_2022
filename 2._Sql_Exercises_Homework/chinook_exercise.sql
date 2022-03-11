@@ -23,7 +23,6 @@ GROUP BY BillingCountry
 HAVING SUM(Total) >= 100
 ORDER BY monetaryAmount DESC;
 
-
 4. Get the phone number of the boss of those employees who have given support to clients who have bought some song
 composed by “Miles Davis” in “MPEG Audio File” format.
 
@@ -42,7 +41,6 @@ AND Genre.Name = 'Bossa Nova'
 AND Track.AlbumId = Album.AlbumId
 AND Track.Name LIKE 'Samba%';
 
-
 6. For each genre, show the average length of its songs in minutes (without indicating seconds). Use the headers “Genre”
 and “Minutes”, and include only genres that have any song longer than half an hour.
 
@@ -53,11 +51,33 @@ WHERE Milliseconds/60000 > 30
 AND Genre.GenreId = Track.GenreId
 GROUP BY Genre;
 
-
 7. How many client companies have no state?
 
-8. For each employee with clients in the “USA”, “Canada” and “Mexico” show the number of clients from these countries s/he has given support, only when this number is higher than 6. Sort the query by number of clients. Regarding the employee, show his/her first name and surname separated by a space. Use “Employee” and “Clients” as headers.
+SELECT DISTINCT count(Company) From customer
+WHERE State IS NULL
+AND Company IS NOT NULL;
 
-9. For each client from the “USA”, show his/her surname and name (concatenated and separated by a comma) and their fax number. If they do not have a fax number, show the text “S/he has no fax”. Sort by surname and first name.
+8. For each employee with clients in the “USA”, “Canada” and “Mexico” show the number of clients from these countries
+s/he has given support, only when this number is higher than 6. Sort the query by number of clients. Regarding the
+employee, show his/her first name and surname separated by a space. Use “Employee” and “Clients” as headers.
+
+SELECT CONCAT(Employee.FirstName,' ', Employee.LastName) AS 'Employee',
+COUNT(SupportRepId) AS 'Client' FROM Employee
+LEFT JOIN Customer C on Employee.EmployeeId = C.SupportRepId
+WHERE C.Country = 'USA'
+OR C.Country = 'Canada'
+OR C.Country = 'Mexico'
+GROUP BY Employee HAVING Client > 6;
+
+9. For each client from the “USA”, show his/her surname and name (concatenated and separated by a comma) and their fax
+number. If they do not have a fax number, show the text “S/he has no fax”. Sort by surname and first name.
+
+SELECT CONCAT(FirstName, ',' , LastName) AS fullName,
+IF NULL(Fax, 'S/he has no fax') AS fax FROM customer
+WHERE Country = 'USA'
+ORDER BY fullName ASC;
 
 10. For each employee, show his/her first name, last name, and their age at the time they were hired.
+
+SELECT FirstName, LastName, TIMESTAMPDIFF(YEAR, BirthDate, HireDate) AS 'age when hired'
+FROM employee
