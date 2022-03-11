@@ -280,9 +280,27 @@ WHERE cSignature IN(SELECT cSignature FROM tloan WHERE tloan.cSignature IS NOT N
 
 28 For each publishing company, show its number of existing books under the heading "No. of Books".
 
+SELECT DISTINCT a.cName,
+b.cTitle AS 'No. of Books'
+FROM tpublishingcompany AS a
+INNER JOIN tbook AS b ON a.nPublishingCompanyID = b.nPublishingCompanyID;
+#NOT SURE OF SOLUTION, INCOMPLETE
 
 
-29 Show the number of members who took some book on a loan during 2013.
+29 Show the number of members who took some book on a loan during 2013.;
 
+SELECT a.cName,
+       a.cSurname
+FROM tmember AS a
+         INNER JOIN tloan ON a.cCPR = tloan.cCPR
+WHERE tloan.dLoan BETWEEN '2013-01-01' AND '2013-12-31';
 
 30 For each book that has at least two authors, show its title and number of authors under the heading "No. of Authors".
+
+#INCOMPLETE
+SELECT a.cTitle,
+COUNT(b.cName) AS 'No. of Authors'
+    FROM tauthor AS b
+    LEFT JOIN tbook AS a ON a.nBookID = b.nAuthorID
+    GROUP BY b.cName;
+
