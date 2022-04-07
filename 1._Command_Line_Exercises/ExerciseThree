@@ -133,7 +133,7 @@ DAT21i - Tech SPRING
 40: create two directories relative and hill and move into hill
     mkdir
 
-41: write something in a file called rider.txt
+41: writehttps://github.com/Williakwin/tech1_dat21i_pull_requests something in a file called rider.txt
     echo 'write something in a file called rider.txt' > rider.txt
 
 42: create a directory degree and move into the directory

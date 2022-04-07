@@ -1,6 +1,6 @@
 import java.util.HashMap;
 
-public class Main {
+public class Hash {
     public static void main(String[] args) {
         HashMap<String, String> movies = new HashMap<>();
         movies.put("index1", "row1");

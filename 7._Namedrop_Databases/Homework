@@ -1,0 +1,59 @@
+Kevin Williams
+DAT21I TECH SPRING 2022
+
+1: List 6 relational databases.
+    - MySQL
+    - PostgreSQL
+    - Oracle Database
+    - SQL Server
+    - PostgreSQL
+    - Firebird
+
+2: List at least 1 of each of the NoSQL categories.
+    - Document Databases
+    - Key-value Stores
+    - Column-oriented Databases
+    - Graph Databases
+
+
+3: List 2 in-memory databases.
+    - H2 Database
+    - HyperSQL Database
+
+
+Notes:
+    - NoSQL is an umbrella term to describe any alternative system to traditional SQL databases
+    - Use a data model that has a different structure than the row and column table model with relational databases.
+    - Document Database
+        . Stores database in JSON,BSOn, or CML documents. Documents can be nested. Elements can be indexed for faster
+          querying.
+    - Key-Value Stores
+        . Simplest. Every data element is stored as key value pair consisting of an attribute name or key
+    - Column-Oriented
+        . Store is organized as a set of columns compared to a relational where data is stored in rows and reads the
+          data row by row.
+    - Graph
+        . Focused on relationship between data elements. Elements are stored as a node. Connection between elements are
+          called links or relationships.
+
+
+    - In-Memory Database relies on system memory as opposed to disk space for storage of data. Memory access is faster
+      than disk access. They are naturally faster
+    - H2
+        . Open source database written in Java that supports standard AQL for both embedded and standalone databases.
+          Very fast and contained within a JAR of only approximately 1.5MB.
+        . To use H2 Maven dependency must be added. Maven is chiefly used for java-based projects, helping to download
+          dependencies which refers to the libraries or JAR files. Helps get the right JAR files for each project as
+          there may be different versions of separate packages.
+        . Connection string could be used with the protocol mem to connect to a H2 in-memory database followed by the
+          database name. driverClassName, URL, username, and password properties can be placed in a .properties file to
+          be read by an application.
+    - HSQLDB (HyperSQL Database)
+        . Open source project also written in Java which represents a relational database. Follows the SQL and JDBC
+          and supports SQL features such as stored procedures and triggers
+        . Uses Maven Dependency
+        . Configuration
+            . driverClassName=org.hsqldb.jdbc.JDBCDriver
+              url=jdbc:hsqldb:mem:myDb
+              username=sa
+              password=sa
