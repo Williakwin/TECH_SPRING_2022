@@ -7,8 +7,18 @@
       <sourceFolder url="file://$MODULE_DIR$/src" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/4._Create_Pull_Request" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/6._Java_Concurrency" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/8._Bouncing_Ball" isTestSource="false" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="module-library" exported="">
+      <library>
+        <CLASSES>
+          <root url="jar://$MODULE_DIR$/../../mysql-connector-java-8.0.28/mysql-connector-java-8.0.28.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
   </component>
 </module>
